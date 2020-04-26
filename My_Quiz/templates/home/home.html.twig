@@ -1,9 +1,33 @@
 {% extends "base.html.twig" %}
 
 
-{% block title %}My_Quiz{% endblock %}
+{% block title %}HaoQuiz{% endblock %}
 
 {% block body %}
-<h1>test twig</h1>
-<p>{{ test }}</p>
+	<h1 class="home-title text-center mb-5 text-primary">Quizz & Fun</h1>
+	<div class="row px-5 mx-5">
+		<div class="col-8 pr-4">
+			<div class="featured-quiz">
+				<a href="#">
+					<img src="assets/img/featured-quiz.jpg">
+					<div class="bottom-left">
+						<span>TEXT D'UN QUIZ RANDOM</span>
+					</div>
+				</a>
+			</div>
+		</div>
+		<div class="col-4">
+			<div class="series-list">
+				<h3 class="mb-4 font-weight-bold text-primary">Most popular</h3>
+				{# Display a list of quiz series #}
+				{% for category in categories %}
+					<div class="series">
+						<a href="{{ path('categorie_details', {'id' : category.id}) }}">
+							{{ category.name }}
+						</a>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
 {% endblock %}
