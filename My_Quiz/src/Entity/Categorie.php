@@ -28,6 +28,11 @@ class Categorie
      */
     private $name;
 
+    /**
+     * @ORM\Column(length=128, unique=true)
+     */
+    private $slug;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,5 +50,16 @@ class Categorie
         return $this;
     }
 
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
 
 }
