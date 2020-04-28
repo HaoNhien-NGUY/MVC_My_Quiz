@@ -57,11 +57,18 @@ class CategorieController extends AbstractController
     }
 
     /**
-     * @Route("/categorie/{slug}/{question}", name="categorie_question")
+     * @Route("/categorie/{slug}/{nb}", name="categorie_question")
      */
-    public function question(Request $request)
+    public function question(Request $request, Categorie $categorie, $nb)
     {   
-        dump($request->getMethod());
-        return $this->render('categorie/question.html.twig', ['categorie' => 'yes']);
+        // dump($request->getMethod(), $categorie, $question);
+        $question = ($categorie->getQuestions())[$nb];
+        $reponses = $question->getReponses();
+
+        return $this->render('categorie/question.html.twig', [
+            'categorie' => $categorie, 
+            'question' => $question,
+            'reponses' => $reponses
+            ]);
     }
 }

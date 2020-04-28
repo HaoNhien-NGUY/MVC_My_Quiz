@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>
-			{% block title %}HaoQuiz
+			{% block title %}HAQuiz
 			{% endblock %}
 		</title>
 		<link rel="stylesheet" href="https://bootswatch.com/4/minty/bootstrap.min.css">
@@ -15,7 +15,7 @@
 			<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-5">
 				{% set route = app.request.get('_route') %}
 				<div class="w-100">
-					<a class="navbar-brand" href="{{ path('home_index') }}">HaoQuiz</a>
+					<a class="navbar-brand" href="{{ path('home_index') }}">HAQuiz</a>
 				</div>
 
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,7 +24,7 @@
 				<div class="collapse navbar-collapse w-100 justify-content-center" id="navbarColor03">
 					<ul class="navbar-nav">
 						<li class="nav-item {{ 'categorie' in route ? 'active' }}">
-							<a class="nav-link {{ app.request.get('_route') == '_list' ? 'active' }}" href="{{ path('categorie') }}">Quiz</a>
+							<a class="nav-link" href="{{ path('categorie') }}">Quiz</a>
 						</li>
 						<li class="nav-item {{ 'history' in route ? 'active' }}">
 							<a class="nav-link" href="#">History</a>

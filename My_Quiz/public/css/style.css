@@ -26,6 +26,7 @@ a:focus {
     font-family: 'Press Start 2P', cursive;
     /* font-family: 'Montserrat', sans-serif; */
     font-size: 1.8rem;
+    /* font-weight: bold; */
     transition: 0.3s;
 }
 
