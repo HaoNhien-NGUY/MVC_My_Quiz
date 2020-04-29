@@ -11,7 +11,7 @@
 				<div class="card border-primary mb-5 mw-100" style="max-width: 20rem;">
 					<div class="card-header h5 text-truncate pr-0">{{ category.name }}</div>
 					<div class="card-body">
-                        <button type="button" onclick=window.location.href='{{ path('categorie_question', {'slug' : category.slug, 'nb' : 1}) }}' class="btn btn-primary btn-lg btn-block mb-3">Start the quiz</button>
+                        <button type="button" onclick=window.location.href='{{ path('categorie_question', {'slug' : category.slug, 'question' : 1}) }}' class="btn btn-primary btn-lg btn-block mb-3">Start the quiz</button>
                         <button type="button" onclick=window.location.href='{{ path('categorie_details', {'slug' : category.slug}) }}' class="btn btn-outline-primary btn-lg btn-block">View details</button>
 					</div>
 				</div>

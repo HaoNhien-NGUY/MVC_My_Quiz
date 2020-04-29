@@ -34,7 +34,14 @@
 						</li>
 					</ul>
 				</div>
-				<div class="w-100"></div>
+				<div class="w-100">
+					{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+						<a href="{{ path('app_logout') }}" class="btn btn-secondary my-2 my-sm-0 mr-3" style="float:right;color:white;">Logout</a>
+					{% else %}
+						<a href="{{ path('app_register') }}" class="btn register-btn my-2 my-sm-0 mr-3" style="float:right;color:white;">Register</a>
+						<a href="{{ path('app_login') }}" class="btn btn-info my-2 my-sm-0 mr-3" style="float:right;color:white;">Login</a>
+					{% endif %}
+				</div>
 			</nav>
 			<div class="container"> {% block body %}{% endblock %}
 				</div>

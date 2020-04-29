@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Categorie;
+use App\Form\AnswerType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class CategorieController extends AbstractController
 {
@@ -38,7 +40,7 @@ class CategorieController extends AbstractController
         $manager = $this->getDoctrine()->getManager();
         $categorie = new Categorie();
         $categorie->setName('Musique classique');
-        $slug = $slugger->slug('musique-classique');
+        $slug = $slugger->slug('musique-classique')->lower();
         $categorie->setSlug($slug);
         $manager->persist($categorie);
         $manager->flush();
@@ -57,18 +59,30 @@ class CategorieController extends AbstractController
     }
 
     /**
-     * @Route("/categorie/{slug}/{nb}", name="categorie_question")
+     * @Route("/categorie/{slug}/{question}", name="categorie_question", requirements={"question"="\d+"})
      */
-    public function question(Request $request, Categorie $categorie, $nb)
-    {   
+    public function question(Request $request, Categorie $categorie, $question)
+    {
         // dump($request->getMethod(), $categorie, $question);
-        $question = ($categorie->getQuestions())[$nb];
+        $question = ($categorie->getQuestions())[$question];
         $reponses = $question->getReponses();
 
+        $form = $this->createFormBuilder()
+            ->add(
+                'answer',
+                ChoiceType::class,
+                [
+                    'choices' => ['answer1' => '1', 'answer2' => '2', 'answer3' => '3', 'answer4' => '4'],
+                    'multiple' => false, 'expanded' => true
+                ]
+            )
+            ->getForm();
+
         return $this->render('categorie/question.html.twig', [
-            'categorie' => $categorie, 
+            'categorie' => $categorie,
             'question' => $question,
-            'reponses' => $reponses
-            ]);
+            'reponses' => $reponses,
+            'form' => $form->createView()
+        ]);
     }
 }

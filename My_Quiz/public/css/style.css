@@ -22,6 +22,14 @@ a:focus {
     margin-right: 15px;
 }
 
+.navbar .btn {
+    border: solid rgb(255, 255, 255) 1px;
+}
+
+.navbar .register-btn:hover {
+    background-color: rgb(104, 165, 148);
+}
+
 .navbar-brand {
     font-family: 'Press Start 2P', cursive;
     /* font-family: 'Montserrat', sans-serif; */
@@ -86,6 +94,14 @@ a:focus {
 
 .series a {
     color: rgb(112, 112, 112);
+}
+
+.question-card {
+    background-color: rgb(228, 255, 247);
+    padding: 40px 30px;
+    border-radius: 10px;
+    border: solid 1px #78C2AD;
+    box-shadow: 0px 7px 17px 5px rgba(0,0,0,0.06);
 }
 
 .card-header.text-truncate:hover {
