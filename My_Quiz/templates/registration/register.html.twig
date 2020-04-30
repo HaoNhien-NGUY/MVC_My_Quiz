@@ -1,14 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Register
+{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username) }}
-        {{ form_row(registrationForm.Password) }}
+	{% form_theme registrationForm 'bootstrap_4_layout.html.twig' %}
+	<div class="row justify-content-center">
+		<div class="col-7">
+			<h1 class="mb-5">Register</h1>
+			{{ form_start(registrationForm) }}
+			{{ form_row(registrationForm.email) }}
+			{{ form_row(registrationForm.username) }}
+			{{ form_row(registrationForm.plainPassword) }}
+			<button class="btn btn-primary mt-3">Register</button>
+			{{ form_end(registrationForm) }}
+		</div>
+	</div>
 
-        <button class="btn">Register</button>
-    {{ form_end(registrationForm) }}
 {% endblock %}

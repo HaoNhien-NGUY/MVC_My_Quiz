@@ -31,38 +31,6 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/register", name="app_register")
-     */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder)
-    {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            // 3) Encode the password (you could also do this via Doctrine listener)
-            $password = $passwordEncoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($password);
-
-            // 4) save the User!
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            // ... do any other work - like sending them an email, etc
-            // maybe set a "flash" success message for the user
-
-            return $this->redirectToRoute('replace_with_some_route');
-        }
-
-        return $this->render(
-            'registration/register.html.twig',
-            array('registrationForm' => $form->createView())
-        );
-    }
-
-    /**
      * @Route("/logout", name="app_logout")
      */
     public function logout()

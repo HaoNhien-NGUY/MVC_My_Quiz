@@ -14,7 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 class CategorieController extends AbstractController
 {
     /**
-     * @Route("/categorie", name="categorie")
+     * @Route("/quiz", name="categorie")
      */
     public function index(Request $request, PaginatorInterface $paginator)
     {
@@ -32,7 +32,7 @@ class CategorieController extends AbstractController
     }
 
     /**
-     * @Route("categorie/create", name="categorie_create_test")
+     * @Route("quiz/create", name="categorie_create_test")
      */
     public function create()
     {
@@ -49,17 +49,22 @@ class CategorieController extends AbstractController
     }
 
     /**
-     * @Route("/categorie/{slug}", name="categorie_details")
+     * @Route("/quiz/{slug}", name="categorie_details")
      */
     public function show(Categorie $categorie)
     {
         // Category stats logic
+        
+        $nbQuestion = $categorie->getQuestions()->count();
 
-        return $this->render('categorie/details.html.twig', ['categorie' => $categorie]);
+        return $this->render('categorie/details.html.twig', [
+            'categorie' => $categorie,
+            'nbQuestion' => $nbQuestion
+            ]);
     }
 
     /**
-     * @Route("/categorie/{slug}/{question}", name="categorie_question", requirements={"question"="\d+"})
+     * @Route("/quiz/{slug}/{question}", name="categorie_question", requirements={"question"="\d+"})
      */
     public function question(Request $request, Categorie $categorie, $question)
     {
