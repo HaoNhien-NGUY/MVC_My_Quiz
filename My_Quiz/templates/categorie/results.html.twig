@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Results :
+	{{ categorie.name }}
+{% endblock %}
+
+{% block body %}
+
+	<h2 class="text-center mb-5">
+		{{ categorie.name }}</h2>
+
+	<div class="card mb-3">
+		<div class="card-header">
+            <h2>Note : {{ nbCorrect }} / {{ totalQuestion }}</h2><a href="{{ path('categorie_details', {'slug' : categorie.slug}) }}" class>Quiz details</a>
+        </div>
+
+        {% for question in questions %}
+		<div class="card-body">
+			<h4 class="card-title mb-4">{{ question.question }}</h4>
+            {% set correctAnswer = '' %}
+            {% for reponse in question.reponses|filter(reponse => reponse.reponseExpected == true) %}
+                {% set correctAnswer = reponse.reponse %}
+            {% endfor %}
+            <h5>Correct answer : <span class="text-primary"><b>{{ correctAnswer }}</b></span></h5>
+			<h5 class="card-subtitle text-muted mt-2">
+                Your answer : <span class="{% if correctAnswer ==  userAnswer[loop.index0] %} text-primary {% else %} text-danger text-strike{% endif %}">{{ userAnswer[loop.index0] }}<span>
+            </h5>
+		</div>
+        {% endfor %}
+	</div>
+
+{% endblock %}

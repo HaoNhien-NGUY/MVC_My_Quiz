@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-	{{ categorie.name }}
+	Quiz : {{ categorie.name }}
 {% endblock %}
 
 {% block body %}
@@ -10,14 +10,49 @@
 
 	<div class="row justify-content-center">
 		<div class="col-9">
-            <div class="question-card">
-                <h1 class="text-center text-primary mb-5"><b> {{ question.question }} </b></h1>
-                {% for reponse in reponses %}
-                    <h5>{{ reponse.reponse }}</h5>
-                {% endfor %}
-                {{ form_start(form) }}
-                {{ form_end(form) }}
-            </div>
+			<div class="question-card">
+				<h2 class="text-primary mb-5">
+					<b>
+						{{ question.question }}
+					</b>
+				</h2>
+				{% if correctAnswer is not defined %}
+					<div class="answer-form btn-group btn-group-toggle justify-content-center pt-3" style="display:flex;">
+						{% form_theme form 'bootstrap_4_layout.html.twig' %}
+						{{ form_start(form) }}
+						{{ form_row(form.answer) }}
+						<button id="form_submit" type="submit" class="btn btn-lg btn-primary mt-5 mx-auto d-block">Submit answer</button>
+						{{ form_end(form) }}
+					</div>
+					<div class="progress mt-5">
+						<div class="progress-bar" role="progressbar" style="width: {{ progress }}%;" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+					</div>
+				{% else %}
+					<div class="question-result">
+						{% if correctAnswer == userAnswer %}
+							<h1 class="text-center text-primary mb-5">Correct !</h1>
+							<h3 class="text-center">The answer was : &nbsp;<b>{{ correctAnswer }}</b>
+							</h3>
+						{% else %}
+							<h1 class="text-center text-danger mb-5"><b>Incorrect !</b></h1>
+							<h3 class="text-center">The answer was : &nbsp;<b>{{ correctAnswer }}</b>
+							</h3>
+							<h5 class="mt-4 text-danger text-center">Your answer :
+								<strike>{{ userAnswer }}</strike></h5>
+						{% endif %}
+					</div>
+					{% if nextQuestion == 0 %}
+						<form action="{{ path('categorie_results', {'slug' : categorie.slug}) }}" method="post">
+							<button type="submit" class="btn btn-lg btn-primary d-block mx-auto my-5">See quiz results</button>
+						</form>
+					{% else %}
+						<form action="{{ path('categorie_next_question', {'slug' : categorie.slug, 'nbquestion' : nextQuestion}) }}" method="post">
+                            <input type="hidden" name="next-token" value="{{ csrf_token('next-question' ~ nextQuestion) }}"/>
+							<button type="submit" class="btn btn-info d-block ml-auto mt-5">Next question</button>
+						</form>
+					{% endif %}
+				{% endif %}
+			</div>
 		</div>
 	</div>
 

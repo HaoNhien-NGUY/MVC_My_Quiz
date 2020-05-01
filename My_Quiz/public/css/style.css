@@ -1,4 +1,4 @@
-a:focus {
+a:focus, input:focus {
     text-decoration: none;
     outline: 0;
 }
@@ -31,10 +31,10 @@ a:focus {
 }
 
 .navbar-brand {
-    font-family: 'Press Start 2P', cursive;
+    /* font-family: 'Press Start 2P', cursive; */
     /* font-family: 'Montserrat', sans-serif; */
     font-size: 1.8rem;
-    /* font-weight: bold; */
+    font-weight: 500;
     transition: 0.3s;
 }
 
@@ -98,16 +98,42 @@ a:focus {
 
 .question-card {
     background-color: rgb(228, 255, 247);
-    padding: 40px 30px;
+    padding: 40px 30px 20px 30px;
     border-radius: 10px;
     border: solid 1px #78C2AD;
     box-shadow: 0px 7px 17px 5px rgba(0, 0, 0, 0.06);
+}
+
+.question-card .progress {
+    border: solid 1px #78C2AD;
+}
+
+.question-result {
+    padding: 0px 40px;
 }
 
 .card-header.text-truncate:hover {
     text-overflow: clip;
     overflow: visible;
 }
+
+.answer-form label {
+    font-size: 1.4rem;
+    padding-left: 15px;
+}
+
+.answer-form input {
+    margin-top: 8px;
+}
+
+.answer-form .form-check {
+    margin-bottom: 10px;
+}
+
+.card-body:not(:last-of-type) {
+    border-bottom : 1px solid rgba(0,0,0,0.125);
+}
+
 
 .profile-info {
     width: 100%;
@@ -128,4 +154,10 @@ a:focus {
     border: #78C2AD 1px solid;
     border-radius: 10px;
     background-color: rgb(233, 233, 233);
+    width: 320px;
+    height: 320px;
+}
+
+.text-strike {
+    text-decoration: line-through;
 }

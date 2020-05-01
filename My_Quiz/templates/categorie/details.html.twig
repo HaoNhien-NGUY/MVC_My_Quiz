@@ -1,10 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ categorie.name }}{% endblock %}
+{% block title %}
+	{{ categorie.name }}
+{% endblock %}
 
 {% block body %}
-<h2 class="text-center"> {{ categorie.name }}</h2>
+	<h2 class="text-center"></h2>
 
-<p>Number of questions : {{ nbQuestion }}</p>
+	<div class="jumbotron">
+		<h1 class="display-3">{{ categorie.name }}</h1>
+		<p class="lead">Number of questions :
+			{{ nbQuestion }}</p>
+		<hr class="my-4">
+		<p class="lead mt-5">
+			<a class="btn btn-primary btn-lg" href="{{ path('categorie_question', { 'slug'  : categorie.slug}) }}" role="button">Start quiz</a>
+		</p>
+	</div>
+
+    <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Column heading</th>
+      <th scope="col">Column heading</th>
+      <th scope="col">Column heading</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Default</th>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+    </tr>
+    <tr class="table-light">
+      <th scope="row">Light</th>
+      <td>Column content</td>
+      <td>Column content</td>
+      <td>Column content</td>
+    </tr>
+  </tbody>
+</table> 
 
 {% endblock %}

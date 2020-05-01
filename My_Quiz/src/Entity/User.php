@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -45,6 +47,16 @@ class User implements UserInterface
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $isVerified;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Resultat", mappedBy="user", orphanRemoval=true)
+     */
+    private $resultats;
+
+    public function __construct()
+    {
+        $this->resultats = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -139,6 +151,37 @@ class User implements UserInterface
     public function setIsVerified(?bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Resultat[]
+     */
+    public function getResultats(): Collection
+    {
+        return $this->resultats;
+    }
+
+    public function addResultat(Resultat $resultat): self
+    {
+        if (!$this->resultats->contains($resultat)) {
+            $this->resultats[] = $resultat;
+            $resultat->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResultat(Resultat $resultat): self
+    {
+        if ($this->resultats->contains($resultat)) {
+            $this->resultats->removeElement($resultat);
+            // set the owning side to null (unless already changed)
+            if ($resultat->getUser() === $this) {
+                $resultat->setUser(null);
+            }
+        }
 
         return $this;
     }

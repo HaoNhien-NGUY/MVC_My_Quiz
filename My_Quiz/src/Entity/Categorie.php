@@ -40,9 +40,15 @@ class Categorie
      */
     private $questions;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Resultat", mappedBy="categorie", orphanRemoval=true)
+     */
+    private $resultats;
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
+        $this->resultats = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -99,6 +105,37 @@ class Categorie
             // set the owning side to null (unless already changed)
             if ($question->getCategorie() === $this) {
                 $question->setCategorie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Resultat[]
+     */
+    public function getResultats(): Collection
+    {
+        return $this->resultats;
+    }
+
+    public function addResultat(Resultat $resultat): self
+    {
+        if (!$this->resultats->contains($resultat)) {
+            $this->resultats[] = $resultat;
+            $resultat->setCategorie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResultat(Resultat $resultat): self
+    {
+        if ($this->resultats->contains($resultat)) {
+            $this->resultats->removeElement($resultat);
+            // set the owning side to null (unless already changed)
+            if ($resultat->getCategorie() === $this) {
+                $resultat->setCategorie(null);
             }
         }
 
