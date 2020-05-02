@@ -20,9 +20,12 @@ class ProfileController extends AbstractController
      */
     public function index()
     {
+        $resultats = $this->getUser()->getResultats();
+        $resultats = array_reverse($resultats->toArray());
 
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'ProfileController',
+            'resultats' => $resultats
         ]);
     }
 
@@ -36,18 +39,21 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if(!$form->get('plainPassword')->isEmpty()) {
+                $user->setPassword(
+                    $passwordEncoder->encodePassword(
+                        $user,
+                        $form->get('plainPassword')->getData()
+                    )
+                );
+            }
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
             // do anything else you need here, like send an email
 
-            return $guardHandler->authenticateUserAndHandleSuccess(
-                $user,
-                $request,
-                $authenticator,
-                'main' // firewall name in security.yaml
-            );
+            return $this->redirectToRoute('profile_index');
         }
 
         return $this->render('profile/edit.html.twig', [

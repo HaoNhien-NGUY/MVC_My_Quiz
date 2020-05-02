@@ -7,39 +7,45 @@
 {% block body %}
 	<h2 class="text-center"></h2>
 
-	<div class="jumbotron">
+	<div class="jumbotron pb-4">
 		<h1 class="display-3">{{ categorie.name }}</h1>
 		<p class="lead">Number of questions :
 			{{ nbQuestion }}</p>
-		<hr class="my-4">
+		<hr class="my-4 mb-5">
+		<h3>Times done : {{ resultats|length }}</h3>
+		{% if avg %}
+			<h3>Average score : {{ avg|round(1) }} / {{ nbQuestion }}</h3>
+		{% endif %}
 		<p class="lead mt-5">
-			<a class="btn btn-primary btn-lg" href="{{ path('categorie_question', { 'slug'  : categorie.slug}) }}" role="button">Start quiz</a>
+			<a class="btn btn-primary btn-lg" href="{{ path('categorie_question', { 'slug' : categorie.slug}) }}" role="button">Start quiz</a>
 		</p>
 	</div>
 
-    <table class="table table-hover">
-  <thead>
-    <tr>
-      <th scope="col">Date</th>
-      <th scope="col">Column heading</th>
-      <th scope="col">Column heading</th>
-      <th scope="col">Column heading</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">Default</th>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-    </tr>
-    <tr class="table-light">
-      <th scope="row">Light</th>
-      <td>Column content</td>
-      <td>Column content</td>
-      <td>Column content</td>
-    </tr>
-  </tbody>
-</table> 
+	{% if avg %}
+		<h2 class="pt-3">History</h2>
+		<table class="table table-hover mt-4 mb-5">
+			<thead>
+				<tr>
+					<th scope="col">Date</th>
+					<th scope="col">Username</th>
+					<th scope="col">Note</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for resultat in resultats %}
+					<tr class="{% if loop.index0 % 2 == 0 %}table-light {% endif %}">
+						<td>{{ resultat.createdAt|date("d M Y \- H:i:s") }}</td>
+						<td>{{ resultat.user.username }}</td>
+						<td>{{ resultat.note }}
+							/
+							{{ nbQuestion }}</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	{% else %}
+		<h2 class="pt-5">Nobody took this quiz yet :(</h2>
+	{% endif %}
+
 
 {% endblock %}

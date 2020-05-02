@@ -6,8 +6,7 @@
 
 {% block body %}
 	<h1 class="text-center mb-5">Hello
-		{{ app.user.username }}
-		!</h1>
+		{{ app.user.username }}.</h1>
 	<div class="profile-info">
 		<div class="row">
 			<div class="col-4">
@@ -22,11 +21,31 @@
 					<li class="list-group-item d-flex justify-content-between align-items-center">Email :
 						{{ app.user.email }}</li>
 					<li class="list-group-item d-flex justify-content-between align-items-center">
-						Number of quiz done : ?????
+						Number of quiz done : {{ resultats|length }}
 					</li>
 				</ul>
 				<a href="{{ path('profile_edit') }}" class="btn-edit">Edit profile</a>
 			</div>
 		</div>
 	</div>
+
+	<h2 class="mt-5">Quiz history</h2>
+	<table class="table table-hover mt-4">
+		<thead>
+			<tr>
+				<th scope="col">Date</th>
+				<th scope="col">Quiz</th>
+				<th scope="col">Note</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for resultat in resultats %}
+				<tr class="{% if loop.index0 % 2 == 0 %}table-light {% endif %}">
+					<td>{{ resultat.createdAt|date("d M Y \- H:i:s") }}</td>
+					<td>{{ resultat.categorie.name }}</td>
+					<td>{{ resultat.note }} / {{ resultat.categorie.questions|length }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 {% endblock %}

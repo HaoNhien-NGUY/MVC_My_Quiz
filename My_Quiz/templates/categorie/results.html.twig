@@ -12,12 +12,12 @@
 
 	<div class="card mb-3">
 		<div class="card-header">
-            <h2>Note : {{ nbCorrect }} / {{ totalQuestion }}</h2><a href="{{ path('categorie_details', {'slug' : categorie.slug}) }}" class>Quiz details</a>
+            <h2>Score : {{ nbCorrect }} / {{ totalQuestion }}</h2><a href="{{ path('categorie_details', {'slug' : categorie.slug}) }}" class>Quiz details</a>
         </div>
 
         {% for question in questions %}
 		<div class="card-body">
-			<h4 class="card-title mb-4">{{ question.question }}</h4>
+			<h4 class="card-title mb-4"><b>{{ question.question }}</b></h4>
             {% set correctAnswer = '' %}
             {% for reponse in question.reponses|filter(reponse => reponse.reponseExpected == true) %}
                 {% set correctAnswer = reponse.reponse %}

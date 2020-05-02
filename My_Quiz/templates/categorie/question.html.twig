@@ -31,11 +31,11 @@
 					<div class="question-result">
 						{% if correctAnswer == userAnswer %}
 							<h1 class="text-center text-primary mb-5">Correct !</h1>
-							<h3 class="text-center">The answer was : &nbsp;<b>{{ correctAnswer }}</b>
+							<h3 class="text-center">The answer was : <br><b>{{ correctAnswer }}</br>
 							</h3>
 						{% else %}
 							<h1 class="text-center text-danger mb-5"><b>Incorrect !</b></h1>
-							<h3 class="text-center">The answer was : &nbsp;<b>{{ correctAnswer }}</b>
+							<h3 class="text-center">The answer was : <br><b>{{ correctAnswer }}</b>
 							</h3>
 							<h5 class="mt-4 text-danger text-center">Your answer :
 								<strike>{{ userAnswer }}</strike></h5>
@@ -43,11 +43,12 @@
 					</div>
 					{% if nextQuestion == 0 %}
 						<form action="{{ path('categorie_results', {'slug' : categorie.slug}) }}" method="post">
+						    <input type="hidden" name="next-token" value="{{ csrf_token(app.session.get('page_token')) }}"/>
 							<button type="submit" class="btn btn-lg btn-primary d-block mx-auto my-5">See quiz results</button>
 						</form>
 					{% else %}
 						<form action="{{ path('categorie_next_question', {'slug' : categorie.slug, 'nbquestion' : nextQuestion}) }}" method="post">
-                            <input type="hidden" name="next-token" value="{{ csrf_token('next-question' ~ nextQuestion) }}"/>
+                            <input type="hidden" name="next-token" value="{{ csrf_token(app.session.get('page_token')) }}"/>
 							<button type="submit" class="btn btn-info d-block ml-auto mt-5">Next question</button>
 						</form>
 					{% endif %}

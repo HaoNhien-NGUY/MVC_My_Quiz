@@ -36,6 +36,18 @@ class ReponseRepository extends ServiceEntityRepository
     }
     */
 
+    public function findCorrectReponse($categorie_id)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.idQuestion = :categorie_id')
+            ->andWhere('r.reponseExpected = :bool')
+            ->setParameter('categorie_id', $categorie_id)
+            ->setParameter('bool', 1)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     /*
     public function findOneBySomeField($value): ?Reponse
     {

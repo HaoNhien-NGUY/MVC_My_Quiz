@@ -9,7 +9,6 @@ use App\Form\AnswerType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -36,29 +35,39 @@ class CategorieController extends AbstractController
     }
 
     /**
-     * @Route("quiz/create", name="categorie_create_test")
+     * @Route("/quiz/{slug}", name="categorie_details")
      */
-    public function create()
+    public function showDetails(Categorie $categorie)
     {
-        $slugger = new AsciiSlugger();
-        $manager = $this->getDoctrine()->getManager();
-        $categorie = new Categorie();
-        $categorie->setName('Musique classique');
-        $slug = $slugger->slug('musique-classique')->lower();
-        $categorie->setSlug($slug);
-        // $manager->persist($categorie);
-        // $manager->flush();
+        $resultats = $categorie->getResultats();
+        $nbQuestion = $categorie->getQuestions()->count();
+        $avg = null;
+        if (!$resultats->isEmpty()) {
+            foreach ($resultats as $resultat) {
+                $avg += $resultat->getNote();
+            }
+            $avg = $avg / $resultats->count();
+        }
+        $resultats = array_reverse($resultats->toArray());
 
-        return $this->render('base.html.twig');
+        return $this->render('categorie/details.html.twig', [
+            'categorie' => $categorie,
+            'nbQuestion' => $nbQuestion,
+            'resultats' => $resultats,
+            'avg' => $avg
+        ]);
     }
 
     /**
      * @Route("/quiz/{slug}/results", methods="POST", name="categorie_results")
      */
-    public function showResults(Categorie $categorie, SessionInterface $session, Security $security)
+    public function showResults(Request $request, Categorie $categorie, SessionInterface $session, Security $security)
     {
-        //csrf token validation here
-
+        if ($submittedToken = $request->request->get('next-token')) {
+            if (!$this->isCsrfTokenValid($session->get('page_token'), $submittedToken)) {
+                throw new AccessDeniedException('Access denied');
+            }
+        }
 
         //add results in database
         $user = $security->getUser();
@@ -67,18 +76,16 @@ class CategorieController extends AbstractController
         $questions = $categorie->getQuestions();
         $nbCorrect = array_count_values($sessionAnswer)[1];
         $totalQuestion = $questions->count();
-        
-        if($user)
-        {
+
+        if ($user) {
             $resultat = new Resultat();
             $resultat->setUser($user)
-            ->setCategorie($categorie)
-            ->setNote($nbCorrect);
+                ->setCategorie($categorie)
+                ->setNote($nbCorrect);
             $entityManager = $this->getDoctrine()->getManager();
-            // $entityManager->persist($resultat);
-            // $entityManager->flush();
+            $entityManager->persist($resultat);
+            $entityManager->flush();
         }
-
 
         return $this->render('categorie/results.html.twig', [
             'categorie' => $categorie,
@@ -86,21 +93,6 @@ class CategorieController extends AbstractController
             'totalQuestion' => $totalQuestion,
             'questions' => $questions,
             'userAnswer' => $userAnswer
-        ]);
-    }
-
-    /**
-     * @Route("/quiz/{slug}", name="categorie_details")
-     */
-    public function showDetails(Categorie $categorie)
-    {
-        // Category stats logic
-
-        $nbQuestion = $categorie->getQuestions()->count();
-
-        return $this->render('categorie/details.html.twig', [
-            'categorie' => $categorie,
-            'nbQuestion' => $nbQuestion
         ]);
     }
 
@@ -124,6 +116,8 @@ class CategorieController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $session->set('page_token', md5(random_bytes(5)));
+
             $userAnswer = $form->get('answer')->getData();
             $correctAnswer = $reponses->filter(function (Reponse $reponse) {
                 return $reponse->getReponseExpected() == 1;
@@ -156,7 +150,7 @@ class CategorieController extends AbstractController
     public function nextQuestion(Request $request, Categorie $categorie, $nbquestion, SessionInterface $session)
     {
         if ($submittedToken = $request->request->get('next-token')) {
-            if (!$this->isCsrfTokenValid('next-question' . $nbquestion, $submittedToken)) {
+            if (!$this->isCsrfTokenValid($session->get('page_token'), $submittedToken)) {
                 throw new AccessDeniedException('Access denied');
             }
         }
@@ -180,6 +174,8 @@ class CategorieController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $session->set('page_token', md5(random_bytes(5)));
+
             $userAnswer = $form->get('answer')->getData();
             $correctAnswer = $reponses->filter(function (Reponse $reponse) {
                 return $reponse->getReponseExpected() == 1;

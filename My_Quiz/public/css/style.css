@@ -154,6 +154,7 @@ a:focus, input:focus {
     border: #78C2AD 1px solid;
     border-radius: 10px;
     background-color: rgb(233, 233, 233);
+    object-fit: cover;
     width: 320px;
     height: 320px;
 }
