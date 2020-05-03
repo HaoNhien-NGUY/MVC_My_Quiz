@@ -21,6 +21,7 @@
 						{% form_theme form 'bootstrap_4_layout.html.twig' %}
 						{{ form_start(form) }}
 						{{ form_row(form.answer) }}
+						{% if progress != 0 %}<input type="hidden" name="next-token" value="{{ csrf_token(app.session.get('page_token')) }}"/>{% endif %}
 						<button id="form_submit" type="submit" class="btn btn-lg btn-primary mt-5 mx-auto d-block">Submit answer</button>
 						{{ form_end(form) }}
 					</div>
@@ -41,7 +42,7 @@
 								<strike>{{ userAnswer }}</strike></h5>
 						{% endif %}
 					</div>
-					{% if nextQuestion == 0 %}
+					{% if nextQuestion == 0 or categorie.questions|length == 1 %}
 						<form action="{{ path('categorie_results', {'slug' : categorie.slug}) }}" method="post">
 						    <input type="hidden" name="next-token" value="{{ csrf_token(app.session.get('page_token')) }}"/>
 							<button type="submit" class="btn btn-lg btn-primary d-block mx-auto my-5">See quiz results</button>

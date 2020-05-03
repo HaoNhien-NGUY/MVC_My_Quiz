@@ -54,7 +54,7 @@ class CategorieController extends AbstractController
             'categorie' => $categorie,
             'nbQuestion' => $nbQuestion,
             'resultats' => $resultats,
-            'avg' => $avg
+            'avg' => $avg,
         ]);
     }
 
@@ -67,6 +67,8 @@ class CategorieController extends AbstractController
             if (!$this->isCsrfTokenValid($session->get('page_token'), $submittedToken)) {
                 throw new AccessDeniedException('Access denied');
             }
+        } else {
+            throw new AccessDeniedException('Access denied');
         }
 
         //add results in database
@@ -74,7 +76,8 @@ class CategorieController extends AbstractController
         $sessionAnswer = $session->get('userAnswer');
         $userAnswer = array_keys($sessionAnswer);
         $questions = $categorie->getQuestions();
-        $nbCorrect = array_count_values($sessionAnswer)[1];
+        $nbCorrect = array_count_values($sessionAnswer);
+        $nbCorrect = isset($nbCorrect[1]) ? $nbCorrect[1] : 0;
         $totalQuestion = $questions->count();
 
         if ($user) {
@@ -153,6 +156,8 @@ class CategorieController extends AbstractController
             if (!$this->isCsrfTokenValid($session->get('page_token'), $submittedToken)) {
                 throw new AccessDeniedException('Access denied');
             }
+        } else {
+            throw new AccessDeniedException('Access denied');
         }
 
         $questions = $categorie->getQuestions();

@@ -53,6 +53,11 @@ class User implements UserInterface
      */
     private $resultats;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $verif_token;
+
     public function __construct()
     {
         $this->resultats = new ArrayCollection();
@@ -182,6 +187,18 @@ class User implements UserInterface
                 $resultat->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getVerifToken(): ?string
+    {
+        return $this->verif_token;
+    }
+
+    public function setVerifToken(?string $verif_token): self
+    {
+        $this->verif_token = $verif_token;
 
         return $this;
     }

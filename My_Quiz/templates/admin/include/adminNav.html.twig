@@ -1,0 +1,14 @@
+<h1 class="text-center mb-5">Administrator Panel</h1>
+
+<ul class="nav nav-pills">
+	<li class="nav-item">
+		<a class="nav-link {{ 'users' in route ? 'active' }}" href="{{ path('admin_users') }}">Users</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link {{ 'quizz' in route ? 'active' }}" href="{{ path('admin_quizz') }}">Quizz</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link {{ 'stats' in route ? 'active' }}" href="{{ path('admin_stats') }}">Stats</a>
+	</li>
+</ul>
+<hr>

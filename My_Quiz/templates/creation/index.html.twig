@@ -6,17 +6,36 @@
 {% block body %}
 	<h1 class="home-title text-center mb-5 pb-3 text-primary">Quiz creation</h1>
 
-	<div class="row">
-		<div class="col-12">quiz title</div>
+	{% form_theme form 'bootstrap_4_layout.html.twig' %}
+	{{ form_start(form) }}
+	<div class="row mb-4">
+		<div class="col-12">
+            <h2 class="mb-4 ml-1">Quiz name</h2>
+            {{ form_row(form.quiz_name) }}
+        </div>
 	</div>
-	<h2 class="text-center">first question</h2>
-	<div class="row">
-		<div class="col-12">question input</div>
+    <hr class="my-5 mx-5">
+	<h2 class="ml-1">First question</h2>
+	<div class="row mb-4">
+		<div class="col-12">
+			{{ form_row(form.question) }}
+		</div>
 	</div>
+
+    <h2 class="text-center mb-4">Answer choice <span style="font-size:1rem;"> &nbsp;(Only 1 right answer)</span></h2>
 	<div class="row">
-		<div class="col-4">reponse input</div>
-		<div class="col-4">reponse input</div>
-		<div class="col-4">reponste input</div>
+		<div class="col-4">
+            {{ form_label(form.reponse_1, 'Correct answer', { 'label_attr': {'class': 'text-primary'} }) }} 
+			{{ form_row(form.reponse_1) }}
+		</div>
+		<div class="col-4">
+			{{ form_row(form.reponse_2) }}
+		</div>
+		<div class="col-4">
+			{{ form_row(form.reponse_3) }}
+		</div>
 	</div>
-    <button>  create and add question</button>
+
+	<button id="form_submit" type="submit" class="btn btn-lg btn-primary mt-5 mx-auto d-block">Create and add more question</button>
+	{{ form_end(form) }}
 {% endblock %}

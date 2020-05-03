@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminController!
+{% endblock %}
+
+{% block body %}
+	{% include "admin/include/adminNav.html.twig" %}
+
+	<h4 class="mt-5">User list</h4>
+	<table class="table table-hover mt-4">
+		<thead>
+			<tr>
+				<th scope="col">Username</th>
+                <th scope="col">Set to admin</th>
+				<th scope="col">Verify account</th>
+				<th scope="col">Delete account</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for user in users %}
+				<tr>
+					<td>{{ user.username }}</td>
+                    <td>{% if 'ROLE_ADMIN' not in user.roles %}<a href="{{ path('admin_user_admin', {'id' : user.id}) }}" class="btn btn-info btn-sm  ml-3">Set admin</a>{% endif %}</td>
+					<td>{% if user.isverified is null %}<a href="{{ path('admin_user_verify', {'id' : user.id}) }}" class="btn btn-info btn-sm  ml-3">Verify</a>{% endif %}</td>
+					<td><a href="{{ path('admin_user_delete', {'id' : user.id}) }}" class="btn btn-danger btn-sm  ml-3">Delete</a></td>
+				</tr>
+
+			{% endfor %}
+
+		</tbody>
+	</table>
+
+	<div class="navigation mt-5">
+		{{ knp_pagination_render(users, '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig') }}
+	</div>
+{% endblock %}

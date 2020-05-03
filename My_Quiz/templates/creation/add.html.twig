@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add question
+{% endblock %}
+
+{% block body %}
+
+    <h1 class="text-center mb-5">Add a question for <b>{{ categorie.name }}</b></h1>
+
+	{% if success is defined %}
+		<div class="alert alert-dismissible alert-primary">
+			<h4 class="alert-heading">Success !</h4>
+			<p class="mb-0">Question added to
+				<b>{{ categorie.name }}</b>
+			</p>
+		</div>
+	{% endif %}
+
+	{% form_theme form 'bootstrap_4_layout.html.twig' %}
+	{{ form_start(form) }}
+    
+    <input type="hidden" name="next-token" value="{{ csrf_token(app.session.get('page_token')) }}"/>
+	<h2 class="ml-1">Question</h2>
+	<div class="row mb-4">
+		<div class="col-12">
+			{{ form_row(form.question) }}
+		</div>
+	</div>
+
+	<h2 class="text-center mb-4">Answer choice
+		<span style="font-size:1rem;">
+			&nbsp;(Only 1 right answer)</span>
+	</h2>
+	<div class="row">
+		<div class="col-4">
+			{{ form_label(form.reponse_1, 'Correct answer', { 'label_attr': {'class': 'text-primary'} }) }}
+			{{ form_row(form.reponse_1) }}
+		</div>
+		<div class="col-4">
+			{{ form_row(form.reponse_2) }}
+		</div>
+		<div class="col-4">
+			{{ form_row(form.reponse_3) }}
+		</div>
+	</div>
+	<button id="form_submit" type="submit" class="btn btn-lg btn-primary mt-5 mx-auto d-block">Add question</button>
+
+	{{ form_end(form) }}
+
+{% endblock %}

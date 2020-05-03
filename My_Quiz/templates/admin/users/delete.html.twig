@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdminController!
+{% endblock %}
+
+{% block body %}
+    <h3 class="text-danger mb-5">Are you sure you want to delete this account : {{ user.email }} - {{ user.username }} ?</h3>
+	{{ form(form) }}
+    <a href="{{ path('admin_users') }}" class="btn btn-outline-primary mt-3">Cancel</a>
+
+{% endblock %}

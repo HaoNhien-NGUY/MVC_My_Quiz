@@ -37,4 +37,20 @@ class SecurityController extends AbstractController
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
+
+    /**
+     * @Route("/validation/{email}/{token}", name="app_mail_validation")
+     */
+    public function validation(User $user, $token)
+    {
+        if($user->getVerifToken() === $token) {
+            $user->setIsVerified(true);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
+        } else {
+            throw new \Exception('Something went wrong!');
+        }
+
+        return $this->redirectToRoute('home_index');
+    }
 }
