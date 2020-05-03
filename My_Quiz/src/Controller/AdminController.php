@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Categorie;
 use App\Entity\User;
+use App\Form\RegistrationFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AdminController extends AbstractController
 {
@@ -115,6 +117,40 @@ class AdminController extends AbstractController
         return $this->render('admin/users/delete.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/admin/users/create", name="admin_user_create");
+     */
+    public function createUserAdmin(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->addFlash(
+                'notice',
+                'User created'
+            );
+
+            $verifToken = md5(random_bytes(5));
+            $user->setPassword(
+                $passwordEncoder->encodePassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            )
+                ->setVerifToken($verifToken)
+                ->setIsVerified(true);
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }
+        return $this->render('admin/users/create.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 
